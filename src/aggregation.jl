@@ -403,13 +403,12 @@ tuples of length ≥ 33 (EnzymeAD/Enzyme.jl#3104).
     N == 0 && return :(((), logjac_zero(flag, _ensure_float(eltype(x))), index))
     ys = [Symbol(:y_, i) for i in 1:N]
     ℓs = [Symbol(:ℓ_, i) for i in 1:N]
-    calls = [:(($(ys[i]), $(ℓs[i]), idx) = transform_with(flag, ts[$i], x, idx))
+    calls = [:(($(ys[i]), $(ℓs[i]), index) = transform_with(flag, ts[$i], x, index))
              for i in 1:N]
     ℓ_sum = foldl((a, b) -> :($a + $b), ℓs)
     return quote
-        idx = index
         $(calls...)
-        (($(ys...),), $ℓ_sum, idx)
+        (($(ys...),), $ℓ_sum, index)
     end
 end
 
